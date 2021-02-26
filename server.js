@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt-nodejs';
 import cors from 'cors';
 import knex from 'knex';
 
-import { user, password, database } from './src/assets/hidden.js';
+import { user, password, database } from './hidden.js';
 
 const db = knex({
   client: 'pg',
@@ -91,18 +91,15 @@ app.post('/signIn', (req, res) => {
 
 app.post ('/register', (req, res) => {
   const { name, email, password } = req.body;
+  console.log(name, email, password);
 
-  bcrypt.hash(password, null, null, function(err, hash) {
-    let hashPassword = hash;
-
-    db('users').insert({
-      name: name,
-      password: hashPassword,
-      email: email,
-      joined: new Date()
-    })
-    res.json(mockDB.users[mockDB.users.length -1]);
-  });
+//   db('users').insert({
+//     name: name,
+//     email: email,
+//     joined: new Date()
+//   }).then(console.log).catch(
+//     err => console.log(err)
+//   );
 });
   
 
@@ -135,6 +132,6 @@ app.put('/image', (req, res) => {
   };
 });
 
-app.listen(3000, () => {
+app.listen(3001, () => {
   console.log("is up and running");
 });
