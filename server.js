@@ -52,25 +52,34 @@ app.post('/signIn', (req, res) => {
   // };
 });
 
-app.post ('/register', (req, res) => {
-  const { name, email } = req.body;
+app.post('/register', (req, res) => {
+  const { name, email, password } = req.body;
+  let hash = bcrypt.hashSync(password);
 
-  db('users').returning('*').insert({
-    name: name,
-    email: email,
-    joined: new Date()
-  }).then(user => {
-    res.json(user[0])
+  db.transaction(trx => {
+    trx.insert({
+      hash: hash,
+      email: email
+    }).into('login').returning('email').then(
+      loginEmail => {
+        return db('users').returning('*').insert({
+          name: name,
+          email: loginEmail,
+          joined: new Date()
+        }).then(user => {
+          res.json(user[0])
+        })
+      })
   }).catch(
     () => res.status(400).json('unable to register')
   );
 });
-  
+
 // Can be used for profile page to update delete
 // When object key is same as value EX: id you can just write it once
 app.get('/profile/:id', (req, res) => {
   const { id } = req.params;
-  db.select('*').from('users').where({id}).then(user => {
+  db.select('*').from('users').where({ id }).then(user => {
     if (user.length) {
       res.json(user[0]);
     } else {
@@ -81,11 +90,11 @@ app.get('/profile/:id', (req, res) => {
 
 app.put('/image', (req, res) => {
   const { id } = req.body;
-  
+
   db('users').where('id', '=', id).increment('entries', 1)
     .returning('entries').then(
       entries => {
-        res.json(entries[0]);  
+        res.json(entries[0]);
       }
     ).catch(err => res.status(400).json('unable to get entries'))
 });
