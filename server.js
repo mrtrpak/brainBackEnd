@@ -91,15 +91,14 @@ app.post('/signIn', (req, res) => {
 
 app.post ('/register', (req, res) => {
   const { name, email, password } = req.body;
-  console.log(name, email, password);
 
-//   db('users').insert({
-//     name: name,
-//     email: email,
-//     joined: new Date()
-//   }).then(console.log).catch(
-//     err => console.log(err)
-//   );
+  db('users').insert({
+    name: name,
+    email: email,
+    joined: new Date()
+  }).then(console.log).catch(
+    err => console.log(err)
+  );
 });
   
 
