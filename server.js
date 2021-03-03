@@ -90,13 +90,15 @@ app.post('/signIn', (req, res) => {
 });
 
 app.post ('/register', (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email } = req.body;
 
-  db('users').insert({
+  db('users').returning('*').insert({
     name: name,
     email: email,
     joined: new Date()
-  }).then(console.log).catch(
+  }).then(response => {
+    res.json(response)
+  }).catch(
     err => console.log(err)
   );
 });
