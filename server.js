@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import bcrypt from 'bcrypt-nodejs';
+import bcrypt, { hash } from 'bcrypt-nodejs';
 import cors from 'cors';
 import knex from 'knex';
 
@@ -36,20 +36,25 @@ app.get('/', (req, res) => {
 });
 
 app.post('/signIn', (req, res) => {
+  const { email, password} = req.body;
 
-  // bcrypt.compare("bacon", hash, function(err, res) {
-  // // res == true
-  // });
-  // bcrypt.compare("veggies", hash, function(err, res) {
-  //   // res = false
-  // });
+  db.select('email', 'hash').from('login')
+    .where('email', '=', email)  
+    .then(
+      data => {
+        const isValid = bcrypt.compareSync(password, data[0].hash);
 
-  // if (req.body.email === mockDB.users[0].email && 
-  //   req.body.password === mockDB.users[0].password) {
-  //   res.json(mockDB.users[0]);
-  // } else {
-  //   res.status(400).json('error logging in');
-  // };
+        if (isValid) {
+          db.select('*').from('users')
+            .where('email', '=', email)
+            .then(user => {
+              res.json(user[0])
+            })
+            .catch(err => res.status(400).json('invalid sign in'))
+        }
+      }
+    )
+    .catch(err => res.status(400).json('invalid'))
 });
 
 app.post('/register', (req, res) => {
@@ -62,14 +67,14 @@ app.post('/register', (req, res) => {
       email: email
     }).into('login').returning('email').then(
       loginEmail => {
-        return db('users').returning('*').insert({
+        return trx('users').returning('*').insert({
           name: name,
-          email: loginEmail,
+          email: loginEmail[0],
           joined: new Date()
         }).then(user => {
           res.json(user[0])
         })
-      })
+      }).then(trx.commit).catch(trx.rollback)
   }).catch(
     () => res.status(400).json('unable to register')
   );
