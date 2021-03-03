@@ -31,43 +31,6 @@ app.use(bodyParser.json());
 // cors middleware
 app.use(cors());
 
-const mockDB = {
-  users: [
-    {
-      id: '1',
-      name: 'PJ',
-      password: 'word',
-      email: 'p@email.com',
-      entries: 0,
-      joined: new Date()
-    },
-    {
-      id: '2',
-      name: 'Amy',
-      password: 'hello',
-      email: 'a@email.com',
-      entries: 0,
-      joined: new Date()
-    },
-    {
-      id: '3',
-      name: 'Lil',
-      password: 'train',
-      email: 'l@email.com',
-      entries: 0,
-      joined: new Date()
-    }
-  ],
-  login: [
-    {
-      id: '1234',
-      hash: '',
-      email: ''
-    }
-
-  ]
-};
-
 app.get('/', (req, res) => {
   res.send(mockDB.users);
 });
@@ -81,12 +44,12 @@ app.post('/signIn', (req, res) => {
   //   // res = false
   // });
 
-  if (req.body.email === mockDB.users[0].email && 
-    req.body.password === mockDB.users[0].password) {
-    res.json(mockDB.users[0]);
-  } else {
-    res.status(400).json('error logging in');
-  };
+  // if (req.body.email === mockDB.users[0].email && 
+  //   req.body.password === mockDB.users[0].password) {
+  //   res.json(mockDB.users[0]);
+  // } else {
+  //   res.status(400).json('error logging in');
+  // };
 });
 
 app.post ('/register', (req, res) => {
@@ -104,32 +67,31 @@ app.post ('/register', (req, res) => {
 });
   
 // Can be used for profile page to update delete
+// When object key is same as value EX: id you can just write it once
 app.get('/profile/:id', (req, res) => {
   const { id } = req.params;
-  let found = false;
-  db.select('*').from('users').where({
-    id: id
-  }).then(user => {
-    console.log(user);
-  })
-  if (!found) {
-    res.status(400).json('not found');
-  };
+  db.select('*').from('users').where({id}).then(user => {
+    if (user.length) {
+      res.json(user[0]);
+    } else {
+      res.status(400).json("not found")
+    }
+  }).catch(err => res.status(400))
 });
 
 app.put('/image', (req, res) => {
   const { id } = req.params;
   let found = false;
-  mockDB.users.forEach(user => {
-    if (user.id === id) {
-      found = true;
-      user.entries++
-      return res.json(user.entries);
-    }
-  })
-  if (!found) {
-    res.status(400).json('not found');
-  };
+  // mockDB.users.forEach(user => {
+  //   if (user.id === id) {
+  //     found = true;
+  //     user.entries++
+  //     return res.json(user.entries);
+  //   }
+  // })
+  // if (!found) {
+  //   res.status(400).json('not found');
+  // };
 });
 
 app.listen(3001, () => {
