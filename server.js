@@ -33,23 +33,22 @@ app.post('/signin', (req, res) => {
 
   db.select('email', 'hash').from('login')
     .where('email', '=', email)  
-    .then(
-      data => {
-        const isValid = bcrypt.compareSync(password, data[0].hash);
+    .then(data => {
+      const isValid = bcrypt.compareSync(password, data[0].hash);
 
-        if (isValid) {
-          return db.select('*').from('users')
-            .where('email', '=', email)
-            .then(user => {
-              res.json(user[0]);
-            })
-            .catch(err => res.status(400).json('unable to get user'));
-        } else {
-          res.status(400).json('wrong credentials');
-        }
+      if (isValid) {
+        return db.select('*').from('users')
+          .where('email', '=', email)
+          .then(user => {
+            res.json(user[0]);
+          })
+          .catch(err => res.status(400).json('unable to get user'));
+      } else {
+        res.status(400).json('wrong credentials');
       }
-    )
-    .catch(err => res.status(400).json('wrong credentials'))
+    }
+  )
+  .catch(err => res.status(400).json('wrong credentials'));
 });
 
 app.post('/register', (req, res) => {
@@ -60,43 +59,51 @@ app.post('/register', (req, res) => {
     trx.insert({
       hash: hash,
       email: email
-    }).into('login').returning('email').then(
-      loginEmail => {
-        return trx('users').returning('*').insert({
-          name: name,
-          email: loginEmail[0],
-          joined: new Date()
-        }).then(user => {
-          res.json(user[0])
-        })
-      }).then(trx.commit).catch(trx.rollback)
-  }).catch(
-    () => res.status(400).json('unable to register')
-  );
+    })
+      .into('login')
+      .returning('email')
+      .then(loginEmail => {
+        return trx('users')
+          .returning('*')
+          .insert({
+            name: name,
+            email: loginEmail[0],
+            joined: new Date()
+          })
+          .then(user => {
+            res.json(user[0]);
+          })
+      })
+      .then(trx.commit).catch(trx.rollback);
+  })
+  .catch(() => res.status(400).json('unable to register'));
 });
 
 // Can be used for profile page to update delete
 // When object key is same as value EX: id you can just write it once
 app.get('/profile/:id', (req, res) => {
   const { id } = req.params;
-  db.select('*').from('users').where({ id }).then(user => {
-    if (user.length) {
-      res.json(user[0]);
-    } else {
-      res.status(400).json("not found")
-    }
-  }).catch(err => res.status(400))
+  db.select('*').from('users').where({ id })
+    .then(user => {
+      if (user.length) {
+        res.json(user[0]);
+      } else {
+        res.status(400).json("not found");
+      };
+    })
+    .catch(err => res.status(400));
 });
 
 app.put('/image', (req, res) => {
   const { id } = req.body;
 
-  db('users').where('id', '=', id).increment('entries', 1)
-    .returning('entries').then(
-      entries => {
-        res.json(entries[0]);
-      }
-    ).catch(err => res.status(400).json('unable to get entries'))
+  db('users').where('id', '=', id)
+    .increment('entries')
+    .returning('entries')
+    .then(entries => {
+      res.json(entries[0]);
+    })
+    .catch(err => res.status(400).json('unable to get entries'));
 });
 
 app.listen(3001, () => {
