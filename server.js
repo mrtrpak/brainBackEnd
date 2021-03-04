@@ -35,8 +35,9 @@ app.get('/', (req, res) => {
   res.send(mockDB.users);
 });
 
-app.post('/signIn', (req, res) => {
-  const { email, password} = req.body;
+app.post('/signin', (req, res) => {
+  const { email, password } = req.body;
+  console.log(email, password, "sign in log");
 
   db.select('email', 'hash').from('login')
     .where('email', '=', email)  
@@ -45,16 +46,17 @@ app.post('/signIn', (req, res) => {
         const isValid = bcrypt.compareSync(password, data[0].hash);
 
         if (isValid) {
-          db.select('*').from('users')
+          return db.select('*').from('users')
             .where('email', '=', email)
             .then(user => {
+              console.log(user);
               res.json(user[0])
             })
-            .catch(err => res.status(400).json('invalid sign in'))
+            .catch(err => res.status(400).json('unable to get user'))
         }
       }
     )
-    .catch(err => res.status(400).json('invalid'))
+    .catch(err => res.status(400).json('wrong credentials'))
 });
 
 app.post('/register', (req, res) => {
