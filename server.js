@@ -16,13 +16,6 @@ const db = knex({
   }
 });
 
-db.select('*').from('users')
-  .then(
-    data => {
-      console.log(data);
-    }
-  )
-
 const app = express();
 
 //middleware to read json
@@ -32,12 +25,11 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.get('/', (req, res) => {
-  res.send(mockDB.users);
+  res.send(db.users);
 });
 
 app.post('/signin', (req, res) => {
   const { email, password } = req.body;
-  console.log(email, password, "sign in log");
 
   db.select('email', 'hash').from('login')
     .where('email', '=', email)  
@@ -49,10 +41,11 @@ app.post('/signin', (req, res) => {
           return db.select('*').from('users')
             .where('email', '=', email)
             .then(user => {
-              console.log(user);
-              res.json(user[0])
+              res.json(user[0]);
             })
-            .catch(err => res.status(400).json('unable to get user'))
+            .catch(err => res.status(400).json('unable to get user'));
+        } else {
+          res.status(400).json('wrong credentials');
         }
       }
     )
