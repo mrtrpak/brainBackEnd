@@ -27,7 +27,7 @@ app.use(cors());
 
 app.get('/', (req, res) => { res.send(database.users) });
 
-app.post('/signin', (req, res) => { handleSignin(req, res, db, bcrypt) });
+app.post('/signin', handleSignin(db, bcrypt));
 
 app.post('/register', (req, res) => { handleRegister(req, res, db, bcrypt) });
 
