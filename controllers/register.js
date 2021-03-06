@@ -1,4 +1,4 @@
-export const handleRegister = (req, res) => {
+export const handleRegister = (req, res, db, bcrypt, validatedEmail) => {
   const { name, email, password } = req.body;
   let hash = bcrypt.hashSync(password);
 

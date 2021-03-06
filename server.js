@@ -5,6 +5,7 @@ import cors from 'cors';
 import knex from 'knex';
 
 import { user, password, database } from './hidden.js';
+import { handleRegister } from './controllers/register.js';
 
 const db = knex({
   client: 'pg',
@@ -55,7 +56,7 @@ app.post('/signin', (req, res) => {
     .catch(err => res.status(400).json('wrong credentials'));
 });
 
-app.post('/register', register.handleRegister(req, res));
+app.post('/register', (req, res) => { handleRegister(req, res, db, bcrypt, validatedEmail) });
 
 // Can be used for profile page to update delete
 // When object key is same as value EX: id you can just write it once
