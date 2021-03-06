@@ -25,9 +25,7 @@ app.use(bodyParser.json());
 // cors middleware
 app.use(cors());
 
-app.get('/', (req, res) => {
-  res.send(database.users);
-});
+app.get('/', (req, res) => { res.send(database.users) });
 
 app.post('/signin', (req, res) => { handleSignin(req, res, db, bcrypt) });
 
