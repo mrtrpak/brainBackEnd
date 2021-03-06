@@ -29,12 +29,12 @@ app.get('/', (req, res) => { res.send(database.users) });
 
 app.post('/signin', handleSignin(db, bcrypt));
 
-app.post('/register', (req, res) => { handleRegister(req, res, db, bcrypt) });
+app.post('/register', handleRegister(db, bcrypt));
 
 // Can be used for profile page to update delete
-app.get('/profile/:id', (req, res) => { handleProfileGet(req, res, db) });
+app.get('/profile/:id', handleProfileGet(db));
 
-app.put('/image', (req , res) => { handleImageGet(req, res, db )});
+app.put('/image', handleImageGet(db));
 
 app.listen(3001, () => {
   console.log("is up and running");

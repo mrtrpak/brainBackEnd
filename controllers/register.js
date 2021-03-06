@@ -2,7 +2,7 @@ const validatedEmail = email => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 };
 
-export const handleRegister = (req, res, db, bcrypt) => {
+export const handleRegister = (db, bcrypt) => (req, res) => {
   const { name, email, password } = req.body;
   let hash = bcrypt.hashSync(password);
 
