@@ -8,6 +8,7 @@ import { user, password, database } from './hidden.js';
 import { handleRegister } from './controllers/register.js';
 import { handleSignin } from './controllers/signin.js';
 import { handleProfile } from './controllers/profile.js';
+import { handleImage } from './controllers/image.js';
 
 const db = knex({
   client: 'pg',
@@ -36,20 +37,9 @@ app.post('/signin', (req, res) => { handleSignin(req, res, db, bcrypt) });
 app.post('/register', (req, res) => { handleRegister(req, res, db, bcrypt) });
 
 // Can be used for profile page to update delete
-// When object key is same as value EX: id you can just write it once
 app.get('/profile/:id', (req, res) => { handleProfile(req, res, db) });
 
-app.put('/image', (req, res) => {
-  const { id } = req.body;
-
-  db('users').where('id', '=', id)
-    .increment('entries')
-    .returning('entries')
-    .then(entries => {
-      res.json(entries[0]);
-    })
-    .catch(err => res.status(400).json('unable to get entries'));
-});
+app.put('/image', (req , res) => { handleImage(req, res, db )});
 
 app.listen(3001, () => {
   console.log("is up and running");
