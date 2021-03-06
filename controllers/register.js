@@ -1,4 +1,8 @@
-export const handleRegister = (req, res, db, bcrypt, validatedEmail) => {
+const validatedEmail = email => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+};
+
+export const handleRegister = (req, res, db, bcrypt) => {
   const { name, email, password } = req.body;
   let hash = bcrypt.hashSync(password);
 
@@ -28,4 +32,4 @@ export const handleRegister = (req, res, db, bcrypt, validatedEmail) => {
     })
       .catch(() => res.status(400).json('unable to register'));
   };
-}
+};
