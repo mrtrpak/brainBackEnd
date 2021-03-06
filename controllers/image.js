@@ -1,4 +1,4 @@
-export const handleImage = (req, res, db) => {
+export const handleImageGet = (req, res, db) => {
   const { id } = req.body;
 
   db('users').where('id', '=', id)

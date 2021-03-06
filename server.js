@@ -5,7 +5,7 @@ import cors from 'cors';
 import knex from 'knex';
 
 import { user, password, database } from './hidden.js';
-import { handleRegister, handleSignin, handleProfile, handleImage } from './controllers/index.js';
+import { handleRegister, handleSignin, handleProfileGet, handleImageGet } from './controllers/index.js';
 
 const db = knex({
   client: 'pg',
@@ -34,9 +34,9 @@ app.post('/signin', (req, res) => { handleSignin(req, res, db, bcrypt) });
 app.post('/register', (req, res) => { handleRegister(req, res, db, bcrypt) });
 
 // Can be used for profile page to update delete
-app.get('/profile/:id', (req, res) => { handleProfile(req, res, db) });
+app.get('/profile/:id', (req, res) => { handleProfileGet(req, res, db) });
 
-app.put('/image', (req , res) => { handleImage(req, res, db )});
+app.put('/image', (req , res) => { handleImageGet(req, res, db )});
 
 app.listen(3001, () => {
   console.log("is up and running");
