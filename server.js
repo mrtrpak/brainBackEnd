@@ -5,10 +5,7 @@ import cors from 'cors';
 import knex from 'knex';
 
 import { user, password, database } from './hidden.js';
-import { handleRegister } from './controllers/register.js';
-import { handleSignin } from './controllers/signin.js';
-import { handleProfile } from './controllers/profile.js';
-import { handleImage } from './controllers/image.js';
+import { handleRegister, handleSignin, handleProfile, handleImage } from './controllers/index.js';
 
 const db = knex({
   client: 'pg',
