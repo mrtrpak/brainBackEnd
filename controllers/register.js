@@ -7,7 +7,7 @@ export const handleRegister = (db, bcrypt) => (req, res) => {
   let hash = bcrypt.hashSync(password);
 
   if (password.length < 8 || password.length > 100 || !validatedEmail(email)) {
-    res.status(400).json('information entered incorrectly');
+    return res.status(400).json('information entered incorrectly');
   } else {
     db.transaction(trx => {
       trx.insert({
