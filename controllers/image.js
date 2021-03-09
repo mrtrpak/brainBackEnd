@@ -5,6 +5,10 @@ const app = new Clarifai.App({
   apiKey: apiKey
 });
 
+export const handleApiCall = (req, res) => {
+  app.models.predict( Clarifai.FACE_DETECT_MODEL, req.body.input);
+};
+
 export const handleImageGet = db => (req, res) => {
   const { id } = req.body;
 

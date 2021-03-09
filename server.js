@@ -24,17 +24,13 @@ app.use(bodyParser.json());
 
 // cors middleware
 app.use(cors());
-
 app.get('/', (req, res) => { res.send(database.users) });
-
 app.post('/signin', handleSignin(db, bcrypt));
-
 app.post('/register', handleRegister(db, bcrypt));
-
-// Can be used for profile page to update delete
+// Can be used for profile page to update delete in future
 app.get('/profile/:id', handleProfileGet(db));
-
 app.put('/image', handleImageGet(db));
+app.post('/imageurl', (req, res) => { Image.handleApiCall(req, res) });
 
 app.listen(3001, () => {
   console.log("is up and running");
