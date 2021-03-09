@@ -35,5 +35,5 @@ app.put('/image', handleImageGet(db));
 app.post('/imageurl', (req, res) => { handleApiCall(req, res) });
 
 app.listen(PORT, () => {
-  console.log("is up and running");
+  console.log(`is up and running on ${PORT}`);
 });
