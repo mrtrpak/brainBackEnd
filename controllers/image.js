@@ -1,3 +1,10 @@
+import Clarifai from 'clarifai';
+import { apiKey } from '../hidden.js';
+
+const app = new Clarifai.App({
+  apiKey: apiKey
+});
+
 export const handleImageGet = db => (req, res) => {
   const { id } = req.body;
 
