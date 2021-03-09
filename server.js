@@ -7,6 +7,8 @@ import knex from 'knex';
 import { user, password, database } from './hidden.js';
 import { handleRegister, handleSignin, handleProfileGet, handleImageGet, handleApiCall } from './controllers/index.js';
 
+const PORT = process.env.PORT || 3001;
+
 const db = knex({
   client: 'pg',
   connection: {
@@ -32,6 +34,6 @@ app.get('/profile/:id', handleProfileGet(db));
 app.put('/image', handleImageGet(db));
 app.post('/imageurl', (req, res) => { handleApiCall(req, res) });
 
-app.listen(3001, () => {
+app.listen(PORT, () => {
   console.log("is up and running");
 });
