@@ -3,11 +3,15 @@ import bodyParser from 'body-parser';
 import bcrypt, { hash } from 'bcrypt-nodejs';
 import cors from 'cors';
 import knex from 'knex';
-
+import dotenv from 'dotenv';
 
 import { handleRegister, handleSignin, handleProfileGet, handleImageGet, handleApiCall } from './controllers/index.js';
 
 const PORT = process.env.PORT || 3001;
+
+const user = process.env.USER;
+const password = process.env.PASSWORD;
+const database = process.env.DATABASE;
 
 const db = knex({
   client: 'pg',
@@ -20,6 +24,8 @@ const db = knex({
 });
 
 const app = express();
+
+dotenv.config();
 
 //middleware to read json
 app.use(bodyParser.json());

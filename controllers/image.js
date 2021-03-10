@@ -1,5 +1,6 @@
 import Clarifai from 'clarifai';
-import { apiKey } from '../hidden.js';
+
+const apiKey = process.env.API_KEY;
 
 const app = new Clarifai.App({
   apiKey: apiKey
