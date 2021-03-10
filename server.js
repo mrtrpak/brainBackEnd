@@ -4,7 +4,7 @@ import bcrypt, { hash } from 'bcrypt-nodejs';
 import cors from 'cors';
 import knex from 'knex';
 
-import { user, password, database } from './hidden.js';
+
 import { handleRegister, handleSignin, handleProfileGet, handleImageGet, handleApiCall } from './controllers/index.js';
 
 const PORT = process.env.PORT || 3001;
