@@ -26,7 +26,7 @@ app.use(bodyParser.json());
 
 // cors middleware
 app.use(cors());
-app.get('/', (req, res) => { res.send(database.users) });
+app.get('/', (req, res) => { res.send('it is working!') });
 app.post('/signin', handleSignin(db, bcrypt));
 app.post('/register', handleRegister(db, bcrypt));
 // Can be used for profile page to update delete in future
