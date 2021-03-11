@@ -9,6 +9,7 @@ import { handleRegister, handleSignin, handleProfileGet, handleImageGet, handleA
 
 const PORT = process.env.PORT || 3001;
 
+const host = process.env.HOST;
 const user = process.env.USER;
 const password = process.env.PASSWORD;
 const database = process.env.DATABASE;
@@ -16,7 +17,7 @@ const database = process.env.DATABASE;
 const db = knex({
   client: 'pg',
   connection: {
-    host: '127.0.0.1',
+    host: host,
     user: user,
     password: password,
     database: database
