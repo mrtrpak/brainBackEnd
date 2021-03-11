@@ -9,6 +9,8 @@ import { handleRegister, handleSignin, handleProfileGet, handleImageGet, handleA
 
 const PORT = process.env.PORT || 3001;
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
+
 const db = knex({
   client: 'pg',
   connection: {
