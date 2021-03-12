@@ -1,7 +1,16 @@
 # brainBackEnd
 
 ## App Website
+
+- [https://smart-brain-detect3.herokuapp.com/](#https://smart-brain-detect3.herokuapp.com/)
+
+## App Backend Website
+
 - [CLICK HERE](#https://pacific-wildwood-77993.herokuapp.com/)
+
+## Frontend Repo
+
+- [CLICK HERE](#https://github.com/mrtrpak/facerecognition)
 
 ## Summary
 
